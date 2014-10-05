@@ -190,9 +190,10 @@ static int tas5713_probe(struct snd_soc_codec *codec)
 	
 	// Reset error
 	ret = snd_soc_write(codec, TAS5713_ERROR_STATUS, 0x00);
+	if (ret < 0) return ret;
 	
 	// Trim oscillator
-    ret = snd_soc_write(codec, TAS5713_OSC_TRIM, 0x00);
+	ret = snd_soc_write(codec, TAS5713_OSC_TRIM, 0x00);
 	msleep(1000);
 	
 	// Reset error
@@ -224,7 +225,6 @@ static int tas5713_probe(struct snd_soc_codec *codec)
 	
 	// Unmute
 	ret = snd_soc_write(codec, TAS5713_SYSTEM_CTRL2, 0x00);
-
 
 	return 0;
 }
