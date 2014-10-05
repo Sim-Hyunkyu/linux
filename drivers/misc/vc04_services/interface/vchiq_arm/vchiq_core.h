@@ -294,6 +294,7 @@ typedef struct vchiq_service_struct {
 	char auto_close;
 	char sync;
 	char closing;
+	char trace;
 	atomic_t poll_flags;
 	short version;
 	short version_min;
@@ -602,6 +603,10 @@ find_service_by_port(VCHIQ_STATE_T *state, int localport);
 
 extern VCHIQ_SERVICE_T *
 find_service_for_instance(VCHIQ_INSTANCE_T instance,
+	VCHIQ_SERVICE_HANDLE_T handle);
+
+extern VCHIQ_SERVICE_T *
+find_closed_service_for_instance(VCHIQ_INSTANCE_T instance,
 	VCHIQ_SERVICE_HANDLE_T handle);
 
 extern VCHIQ_SERVICE_T *

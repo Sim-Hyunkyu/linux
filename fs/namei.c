@@ -34,6 +34,7 @@
 #include <linux/device_cgroup.h>
 #include <linux/fs_struct.h>
 #include <linux/posix_acl.h>
+#include <linux/hash.h>
 #include <asm/uaccess.h>
 
 #include "internal.h"
@@ -1661,8 +1662,7 @@ static inline int can_lookup(struct inode *inode)
 
 static inline unsigned int fold_hash(unsigned long hash)
 {
-	hash += hash >> (8*sizeof(int));
-	return hash;
+	return hash_64(hash, 32);
 }
 
 #else	/* 32-bit case */
@@ -2281,9 +2281,10 @@ done:
 		goto out;
 	}
 	path->dentry = dentry;
-	path->mnt = mntget(nd->path.mnt);
+	path->mnt = nd->path.mnt;
 	if (should_follow_link(dentry->d_inode, nd->flags & LOOKUP_FOLLOW))
 		return 1;
+	mntget(path->mnt);
 	follow_mount(path);
 	error = 0;
 out:
